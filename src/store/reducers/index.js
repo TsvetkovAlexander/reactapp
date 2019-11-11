@@ -9,13 +9,10 @@ const initialState = {
 export default (state = initialState, action) => {
   switch (action.type) {
       case GET_LINE_SUCCESS:
-      console.log("action.payload",action.payload);
       return {...state, data: action.payload };
 
 
     case DELETE_LINE_SUCCESS:
-        console.log('action.payload',action.payload);
-        console.log('state.dataREDUCER', state.data);
       return {
         ...state,
         data: state.data.filter((el) => el.id !== action.payload),

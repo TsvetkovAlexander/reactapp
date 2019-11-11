@@ -7,10 +7,10 @@ export const GET_LINE_SUCCESS = 'GET_LINE_SUCCESS';
 
 export const deleteLine = (guid) =>{
   console.log('guid',guid);
-  return(
-      { type: DELETE_LINE_SUCCESS, payload: guid });
-
-}
+  return({
+    type: DELETE_LINE_SUCCESS,
+    payload: guid
+  })};
 
 export const getLine = (line) => {
   console.log('line',line);
@@ -20,7 +20,8 @@ export const getLine = (line) => {
   })};
 
 export const editLine = (line) => {
-  console.log('lineedit',line);  return({
+  console.log('line',line);
+  return({
   type: 'EDIT_LINE_SUCCESS',
   payload: line,
 })};

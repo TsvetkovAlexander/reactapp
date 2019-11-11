@@ -1,71 +1,90 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import { Form, Field } from 'react-final-form';
+import { TextField, Checkbox, Radio, Select } from 'final-form-material-ui';
+import {
+    Paper,
+    Grid,
+    Button,
+    CssBaseline,
+    MenuItem,
+    FormControlLabel,
+} from '@material-ui/core';
 
-import Button from '@material-ui/core/Button';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import './style.css';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import Switches from '../Switches';
-
-
-const required = value => (value ? undefined : 'Required');
-const mustBeNumber = value => (value.length <= 3 || value.length >= 10 ? 'Must be between 3 to 10 characters' : undefined);
-const composeValidators = (...validators) => value =>
-    validators.reduce((error, validator) => error || validator(value), undefined);
-
-
-
-const CreateCard = ({ onSubmit, handleClose, initialValues }) => {
-    console.log('initialValues', initialValues);
-    return(<Form
-        onSubmit={onSubmit}
-        initialValues={initialValues}
-        render={({ handleSubmit }) => (
-            <form onSubmit={handleSubmit}>
-
-                <DialogContent className="input-group-modal">
-                    <h2> {initialValues.name}</h2>
-                    <Field
-                        required name="name"
-                        validate={composeValidators(required, mustBeNumber)}
-                    >
-                        {({ input, meta }) => (
-                            <div className='inputAndValudation'>
-                                <label>type</label>
-                                <input {...input} type="text" className='inputType'/>
-                                {meta.error && meta.touched && <span className='validationMessage' >{meta.error}</span>}
-                            </div>
-                        )}
-                    </Field>
-                    <div>
-                        <label>Employed</label>
-                        <Field name="isActive" component="input" type="checkbox" />
-                    </div>
-                    <div>
-                        <label>Type</label>
-
-                        <Field required name="type" component="select">
-                            <option value="everti">everti</option>
-                            <option value="novum">novum</option>
-                            <option value="semper">semper</option>
-                        </Field>
-                    </div>
-                </DialogContent>
-                <DialogActions className="AddClose">
-                    <Button type="submit" color="primary">
-                        SAVE
-                    </Button>
-                    <Button onClick={handleClose} color="primary" autoFocus>
-                       CANCEL
-                    </Button>
-                </DialogActions>
-            </form>
-        )}
-    />);
+const validate = values => {
+    const errors = {};
+    if (!values.name) {
+        errors.name = 'Required';
+    }
+    console.log('values.name', values);
+    // if (values.l >= 10 || values.length <= 3 ) {
+    //     errors.name = 'Must be between 3 to 10 characters';
+    // }
+    return errors;
 };
 
-
-export default CreateCard;
+export default function App({ onSubmit,initialValues}) {
+    return (
+        <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
+            <CssBaseline />
+            <Form
+                onSubmit={ onSubmit}
+                validate={validate}
+                render={({ handleSubmit, reset, submitting, pristine, values, onSubmit }) => (
+                    <form onSubmit={handleSubmit} >
+                        <Paper style={{ padding: 16 }}>
+                            <Grid container alignItems="flex-start" spacing={2}>
+                                <Grid item xs={6}>
+                                    <Field
+                                        fullWidth
+                                        required
+                                        name="name"
+                                        component={TextField}
+                                        type="text"
+                                        defaultValue={initialValues.name}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Field
+                                        fullWidth
+                                        name="type"
+                                        component={Select}
+                                        label="type"
+                                        defaultValue={initialValues.type}
+                                    >
+                                        <MenuItem value="everti">everti</MenuItem>
+                                        <MenuItem value="novum">novum</MenuItem>
+                                        <MenuItem value="semper">semper</MenuItem>
+                                    </Field>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControlLabel
+                                        label="isActive"
+                                        control={
+                                            <Field
+                                                name="isActive"
+                                                component={Checkbox}
+                                                type="checkbox"
+                                                defaultValue={initialValues.isActive}
+                                            />
+                                        }
+                                    />
+                                </Grid>
+                                <Grid item style={{ marginTop: 16}}>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        type="submit"
+                                        disabled={submitting}
+                                    >
+                                        Submit
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Paper>
+                    </form>
+                )}
+            />
+        </div>
+    );
+}
